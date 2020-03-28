@@ -1,59 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool partition(int a[], int n)
+bool t[100][100];
+
+bool isSubsetSum(int a[], int n, int sum)
 {
 
-    int sum = 0;
+    if (sum == 0)
+        return true;
 
-    for (int i = 0; i < n; i++)
-    {
-        sum += a[i];
-    }
-
-    if (sum % 2 != 0)
+    if (n == 0 && sum != 0)
         return false;
 
-    bool p[sum / 2 + 1][n + 1];
+    if (t[n][sum] != 0)
+        return t[n][sum];
 
-    for (int i = 0; i <= n; i++)
-        p[0][i] = true;
+    if (a[n - 1] > sum)
+        return t[n][sum] = isSubsetSum(a, n - 1, sum);
 
-    for (int i = 0; i <= sum / 2; i++)
-        p[i][0] = false;
-
-    for (int i = 1; i <= sum / 2; i++)
+    else if (a[n - 1] <= sum)
     {
-        for (int j = 1; j <= n; j++)
-        {
-            p[i][j] = p[i][j - 1];
-            if (i >= a[j - 1])
-                p[i][j] = p[i][j - 1] || p[i - a[j - 1]][j - 1];
-        }
+        return t[n][sum] = ((isSubsetSum(a, n - 1, sum - a[n - 1])) || (isSubsetSum(a, n - 1, sum)));
     }
-    return p[sum / 2][n];
 }
 
 int main()
 {
-    int t;
-    cin >> t;
-    while (t--)
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int tc;
+    cin >> tc;
+    while (tc--)
     {
+
+        memset(t, false, sizeof t);
+
         int n;
         cin >> n;
-        int a[n];
+        int a[n + 5];
         for (int i = 0; i < n; i++)
         {
             cin >> a[i];
         }
-        if (partition(a, n))
-        {
-            cout << "YES\n";
-        }
-        else
-        {
-            cout << "NO\n";
-        }
+        int sum;
+        cin >> sum;
+        isSubsetSum(a, n, sum) ? cout << "YES\n" : cout << "NO\n";
     }
 }
