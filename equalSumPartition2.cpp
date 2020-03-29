@@ -5,22 +5,27 @@ int t[105][100005];
 bool isSubsetSum(int a[], int n, int sum)
 {
 
-    if (sum == 0)
-        return true;
-
-    if (n == 0 && sum != 0)
-        return false;
-
-    if (t[n][sum] != 0)
-        return t[n][sum];
-
-    if (a[n - 1] > sum)
-        return isSubsetSum(a, n - 1, sum);
-
-    else if (a[n - 1] <= sum)
+    for (int i = 0; i <= n; i++)
     {
-        return t[n][sum] = (isSubsetSum(a, n - 1, sum - a[n - 1])) || (isSubsetSum(a, n - 1, sum));
+        t[i][0] = true;
     }
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= sum; j++)
+        {
+            if (a[i - 1] > j)
+            {
+                t[i][j] = t[i - 1][j];
+            }
+            else if (a[i - 1] <= j)
+            {
+                t[i][j] = (t[i - 1][j - a[i - 1]]) || (t[i - 1][j]);
+            }
+        }
+    }
+
+    return t[n][sum];
 }
 
 int main()
