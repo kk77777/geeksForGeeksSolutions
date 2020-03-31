@@ -1,36 +1,54 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int t[305][305];
+
+int coinChange(int n, int a[], int csum)
+{
+
+    for (int i = 0; i <= csum; i++)
+    {
+        t[0][i] = 0;
+    }
+    for (int i = 0; i <= n; i++)
+    {
+        t[i][0] = 1;
+    }
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= csum; j++)
+        {
+            if (a[i - 1] <= j)
+            {
+                t[i][j] = t[i - 1][j] + t[i][j - a[i - 1]];
+            }
+            else if (a[i - 1] > j)
+            {
+                t[i][j] = t[i - 1][j];
+            }
+        }
+    }
+
+    return t[n][csum];
+}
+
 int main()
 {
-    int t;
-    cin >> t;
-
-    while (t--)
+    int tc;
+    cin >> tc;
+    while (tc--)
     {
-        int m;
-        cin >> m;
-
-        int a[m + 5];
-        for (int i = 0; i < m; i++)
+        memset(t, -1, sizeof t);
+        int n, csum;
+        cin >> n;
+        int a[n + 5];
+        for (int i = 0; i < n; i++)
         {
             cin >> a[i];
         }
-        int n;
-        cin >> n;
+        cin >> csum;
 
-        int table[n + 1];
-        memset(table, 0, sizeof table);
-
-        table[0] = 1;
-
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = a[i]; j <= n; j++)
-            {
-                table[j] += table[j - a[i]];
-            }
-        }
-        cout << table[n] << "\n";
+        cout << coinChange(n, a, csum) << "\n";
     }
 }
