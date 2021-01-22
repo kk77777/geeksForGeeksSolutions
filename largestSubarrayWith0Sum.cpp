@@ -1,26 +1,50 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+int maxLen(int A[], int n);
+
+int main()
+{
+    int T;
+    cin >> T;
+    while (T--)
+    {
+        int N;
+        cin >> N;
+        int A[N];
+        for (int i = 0; i < N; i++)
+            cin >> A[i];
+        cout << maxLen(A, N) << endl;
+    }
+}
+// } Driver Code Ends
+
+/*You are required to complete this function*/
+
 int maxLen(int a[], int n)
 {
     // Your code here
-    unordered_map<int, int> prevSum;
-    int sum = 0;
-    int maxLength = 0;
+    unordered_map<int, int> mp;
+    int sum = 0, maxi = 0;
     for (int i = 0; i < n; i++)
     {
         sum += a[i];
-        if (a[i] == 0 && maxLength == 0)
-            maxLength = 1;
         if (sum == 0)
         {
-            maxLength = i + 1;
-        }
-        if (prevSum.find(sum) != prevSum.end())
-        {
-            maxLength = max(maxLength, i - prevSum[sum]);
+            maxi = i + 1;
         }
         else
         {
-            prevSum[sum] = i;
+            if (mp.find(sum) != mp.end())
+            {
+                maxi = max(maxi, i - mp[sum]);
+            }
+            else
+            {
+                mp[sum] = i;
+            }
         }
     }
-    return maxLength;
+    return maxi;
 }
