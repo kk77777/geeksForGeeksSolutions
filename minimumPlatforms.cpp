@@ -1,51 +1,55 @@
+// { Driver Code Starts
+// Program to find minimum number of platforms
+// required on a railway station
 #include <bits/stdc++.h>
 using namespace std;
 
+// } Driver Code Ends
+
+int findPlatform(int arr[], int dep[], int n)
+{
+    // Your code here
+    sort(arr, arr + n);
+    sort(dep, dep + n);
+    int a, d, ans = 1, plat = 1;
+    int i = 1, j = 0;
+    while (i < n && j < n)
+    {
+        if (arr[i] <= dep[j])
+        {
+            plat++;
+            i++;
+        }
+        else if (arr[i] > dep[j])
+        {
+            plat--;
+            j++;
+        }
+        if (plat > ans)
+            ans = plat;
+    }
+    return ans;
+}
+
+// { Driver Code Starts.
+// Driver code
 int main()
 {
-    int tc;
-    cin >> tc;
-    while (tc--)
+    int t;
+    cin >> t;
+    while (t--)
     {
         int n;
         cin >> n;
-        vector<int> a, d;
-
+        int arr[n];
+        int dep[n];
         for (int i = 0; i < n; i++)
+            cin >> arr[i];
+        for (int j = 0; j < n; j++)
         {
-            int x;
-            cin >> x;
-            a.push_back(x);
+            cin >> dep[j];
         }
-        for (int i = 0; i < n; i++)
-        {
-            int x;
-            cin >> x;
-            d.push_back(x);
-        }
-        sort(a.begin(), a.end());
-        sort(d.begin(), d.end());
-
-        int p = 1;
-        int result = 1;
-        int j = 0, i = 1;
-        while (i < n && j < n)
-        {
-            if (a[i] <= d[j])
-            {
-                p++;
-                i++;
-                if (p > result)
-                {
-                    result = p;
-                }
-            }
-            else
-            {
-                p--;
-                j++;
-            }
-        }
-        cout << result << "\n";
+        cout << findPlatform(arr, dep, n) << endl;
     }
-}
+    return 0;
+} // } Driver Code Ends
