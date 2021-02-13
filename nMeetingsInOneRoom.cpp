@@ -1,56 +1,71 @@
+// { Driver Code Starts
 #include <bits/stdc++.h>
+
 using namespace std;
 
-struct activity
-{
-    int s, e, index;
-};
-
-bool compareActivity(activity a, activity b)
-{
-    return a.e < b.e;
-}
+int maxMeetings(int *, int *, int);
 
 int main()
 {
-    int tc;
-    cin >> tc;
-    while (tc--)
+    int t;
+    cin >> t;
+    while (t--)
     {
         int n;
         cin >> n;
-        vector<activity> v(n, {0, 0, 0});
+        int start[n], end[n];
         for (int i = 0; i < n; i++)
-        {
-            int x;
-            cin >> x;
-            v[i].s = x;
-            v[i].index = i + 1;
-        }
-        for (int i = 0; i < n; i++)
-        {
-            int x;
-            cin >> x;
-            v[i].e = x;
-        }
-        sort(v.begin(), v.end(), compareActivity);
+            cin >> start[i];
 
-        int y = v[0].e;
-        int c = 0;
-        cout << v[0].index << " ";
-        for (int i = 1; i < n; i++)
-        {
-            if (v[i].s >= y)
-            {
-                c++;
-                cout << v[i].index << " ";
-                y = v[i].e;
-            }
-            else if (v[i].e < y)
-            {
-                y = v[i].e;
-            }
-        }
-        cout << "\n";
+        for (int i = 0; i < n; i++)
+            cin >> end[i];
+
+        int ans = maxMeetings(start, end, n);
+        cout << ans << endl;
     }
+    return 0;
+} // } Driver Code Ends
+
+struct meeting
+{
+    int s;
+    int e;
+    int pos;
+};
+
+bool comparator(struct meeting m1, struct meeting m2)
+{
+    if (m1.e < m2.e)
+        return true;
+    else if (m1.e > m2.e)
+        return false;
+    else if (m1.pos < m2.pos)
+        return true;
+}
+
+int maxMeetings(int start[], int end[], int n)
+{
+    // Your code here
+    int cnt = 1;
+    struct meeting meet[n];
+    for (int i = 0; i < n; i++)
+    {
+        meet[i].s = start[i];
+        meet[i].e = end[i];
+        meet[i].pos = i + 1;
+    }
+    sort(meet, meet + n, comparator);
+    // vector<int> ans;
+    int l = meet[0].e;
+    // ans.push_back(meet[0].pos);
+    for (int i = 1; i < n; i++)
+    {
+        if (meet[i].s > l)
+        {
+            // ans.push_back(meet[i].pos);
+            l = meet[i].e;
+            cnt++;
+        }
+    }
+    return cnt;
 }
