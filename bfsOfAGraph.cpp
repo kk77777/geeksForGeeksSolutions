@@ -1,62 +1,68 @@
 // { Driver Code Starts
 #include <bits/stdc++.h>
-
 using namespace std;
 
-vector<int> bfs(vector<int> g[], int N);
+// } Driver Code Ends
 
+class Solution
+{
+public:
+    int n = 500;
+    bool vis[10004];
+    vector<int> bfsOfGraph(int V, vector<int> adj[])
+    {
+        // Code here
+        memset(vis, 0, sizeof(vis));
+        queue<int> q;
+        vector<int> ans;
+        q.push(0);
+        vis[0] = true;
+        while (!q.empty())
+        {
+            int temp = q.front();
+            q.pop();
+            ans.push_back(temp);
+            for (auto i : adj[temp])
+            {
+                if (!vis[i])
+                {
+                    vis[i] = true;
+                    q.push(i);
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// { Driver Code Starts.
 int main()
 {
-    int T;
-    cin >> T;
-    while (T--)
+    int tc;
+    cin >> tc;
+    while (tc--)
     {
-        int N, E;
-        cin >> N >> E;
-        vector<int> adj[N];
+        int V, E;
+        cin >> V >> E;
+
+        vector<int> adj[V];
+
         for (int i = 0; i < E; i++)
         {
             int u, v;
             cin >> u >> v;
             adj[u].push_back(v);
+            // 		adj[v].push_back(u);
         }
-        vector<int> res = bfs(adj, N);
-        for (int i = 0; i < res.size(); i++)
-            cout << res[i] << " ";
+        // string s1;
+        // cin>>s1;
+        Solution obj;
+        vector<int> ans = obj.bfsOfGraph(V, adj);
+        for (int i = 0; i < ans.size(); i++)
+        {
+            cout << ans[i] << " ";
+        }
         cout << endl;
     }
+    return 0;
 } // } Driver Code Ends
-
-/* You have to complete this function*/
-
-/* Function to do BFS of graph
-*  g[]: adj list of the graph
-*  N : number of vertices
-*/
-
-bool vis[10005];
-vector<int> bfs(vector<int> g[], int N)
-{
-    // Your code here
-    memset(vis, 0, sizeof(vis));
-    vector<int> v;
-    queue<int> q;
-    q.push(0);
-    vis[0] = true;
-    while (!q.empty())
-    {
-        int temp = q.front();
-        v.push_back(temp);
-        q.pop();
-
-        for (auto i : g[temp])
-        {
-            if (!vis[i])
-            {
-                vis[i] = true;
-                q.push(i);
-            }
-        }
-    }
-    return v;
-}
