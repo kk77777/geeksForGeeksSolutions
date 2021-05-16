@@ -1,44 +1,63 @@
-vector<int> countDistinct(int a[], int n, int k)
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+
+class Solution
 {
-
-    unordered_map<int, int> v;
-    vector<int> x;
-    int cnt = 0;
-    for (int i = 0; i < k; i++)
+public:
+    vector<int> countDistinct(int a[], int n, int k)
     {
-        if (v[a[i]] > 0)
+        //code here.
+        unordered_map<int, int> mp;
+        vector<int> ans;
+        int i = 0, dc = 0;
+        for (; i < k; i++)
         {
-            v[a[i]]++;
+            if (mp[a[i]] == 0)
+            {
+                dc++;
+            }
+            mp[a[i]]++;
         }
-        else
+        ans.push_back(dc);
+        for (; i < n; i++)
         {
-            v[a[i]] = 1;
-            cnt++;
+            if (mp[a[i - k]] == 1)
+            {
+                dc--;
+            }
+            mp[a[i - k]]--;
+            if (mp[a[i]] == 0)
+            {
+                dc++;
+            }
+            mp[a[i]]++;
+            ans.push_back(dc);
         }
+        return ans;
     }
-    x.push_back(cnt);
-    for (int i = k; i < n; i++)
-    {
-        if (v[a[i - k]] == 1)
-        {
-            cnt--;
-            v[a[i - k]] = 0;
-        }
-        else
-        {
-            v[a[i - k]]--;
-        }
-        if (v[a[i]] == 0)
-        {
-            cnt++;
-            v[a[i]] = 1;
-        }
-        else
-        {
-            v[a[i]]++;
-        }
-        x.push_back(cnt);
-    }
+};
 
-    return x;
-}
+// { Driver Code Starts.
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+
+        int n, k;
+        cin >> n >> k;
+        int a[n];
+        for (int i = 0; i < n; i++)
+            cin >> a[i];
+        Solution obj;
+        vector<int> result = obj.countDistinct(a, n, k);
+        for (int i : result)
+            cout << i << " ";
+        cout << endl;
+    }
+    return 0;
+} // } Driver Code Ends
