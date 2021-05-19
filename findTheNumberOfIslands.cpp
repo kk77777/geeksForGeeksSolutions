@@ -1,43 +1,76 @@
-int cnt = 0;
-int dr[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-int dc[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-void check(pair<int, int> p, vector<int> adj[], int n, int m, bool vis[][100])
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+
+class Solution
 {
+    int dr[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+    int dc[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-    vis[p.first][p.second] = 1;
-    for (auto i = 0; i < 8; ++i)
+public:
+    //Function to find the number of islands.
+
+    void dfs(pair<int, int> p, vector<vector<char>> &grid, int n, int m, vector<vector<bool>> &vis)
     {
-        int x = p.first + dr[i];
-        int y = p.second + dc[i];
-
-        if (x >= n || x < 0 || y >= m || y < 0)
-            continue;
-
-        if (vis[x][y])
-            continue;
-        vis[x][y] = 1;
-        if (adj[x][y] == 1)
+        vis[p.first][p.second] = 1;
+        for (int i = 0; i < 8; i++)
         {
-            check({x, y}, adj, n, m, vis);
+            int x = p.first + dr[i];
+            int y = p.second + dc[i];
+
+            if (x < 0 || x >= n || y < 0 || y >= m)
+                continue;
+            if (vis[x][y])
+                continue;
+            if (grid[x][y] == '1')
+                dfs({x, y}, grid, n, m, vis);
         }
     }
-}
 
-int findIslands(vector<int> adj[], int n, int m)
-{
-    cnt = 0;
-    bool vis[100][100] = {0};
-    for (int i = 0; i < n; i++)
+    int numIslands(vector<vector<char>> &grid)
     {
-        for (int j = 0; j < adj[i].size(); j++)
+        // Code here
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<bool>> vis(n, vector<bool>(m, 0));
+        int cnt = 0;
+        for (int i = 0; i < n; i++)
         {
-            if (!vis[i][j] && adj[i][j] == 1)
+            for (int j = 0; j < grid[i].size(); j++)
             {
-                cnt++;
-                pair<int, int> p = {i, j};
-                check(p, adj, n, m, vis);
+                if (!vis[i][j] && grid[i][j] == '1')
+                {
+                    cnt++;
+                    dfs({i, j}, grid, n, m, vis);
+                }
             }
         }
+        return cnt;
     }
-    return cnt;
-}
+};
+
+// { Driver Code Starts.
+int main()
+{
+    int tc;
+    cin >> tc;
+    while (tc--)
+    {
+        int n, m;
+        cin >> n >> m;
+        vector<vector<char>> grid(n, vector<char>(m, '#'));
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                cin >> grid[i][j];
+            }
+        }
+        Solution obj;
+        int ans = obj.numIslands(grid);
+        cout << ans << '\n';
+    }
+    return 0;
+} // } Driver Code Ends
