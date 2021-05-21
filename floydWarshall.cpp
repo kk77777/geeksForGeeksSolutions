@@ -1,8 +1,41 @@
+// { Driver Code Starts
+//Initial template for C++
+
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long int
-#define inf 10000000
 
+// } Driver Code Ends
+//User function template for C++
+
+class Solution
+{
+public:
+    void shortest_distance(vector<vector<int>> &v)
+    {
+        // Code here
+        int n = v.size();
+        for (int k = 0; k < n; k++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j)
+                        continue;
+                    if (v[i][k] == -1 || v[k][j] == -1)
+                        continue;
+                    int x = v[i][j] == -1 ? INT_MAX : v[i][j];
+                    if (x > (v[i][k] + v[k][j]))
+                    {
+                        v[i][j] = (v[i][k] + v[k][j]);
+                    }
+                }
+            }
+        }
+    }
+};
+
+// { Driver Code Starts.
 int main()
 {
     int tc;
@@ -11,42 +44,24 @@ int main()
     {
         int n;
         cin >> n;
-        vector<vector<ll>> v(n, vector<ll>(n, inf));
+        vector<vector<int>> matrix(n, vector<int>(n, -1));
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                cin >> v[i][j];
+                cin >> matrix[i][j];
             }
         }
-        for (int k = 0; k < n; k++)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (v[i][j] > (v[i][k] + v[k][j]))
-                    {
-                        v[i][j] = v[i][k] + v[k][j];
-                    }
-                }
-            }
-        }
-
+        Solution obj;
+        obj.shortest_distance(matrix);
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                if (v[i][j] == 10000000)
-                {
-                    cout << "INF ";
-                }
-                else
-                {
-                    cout << v[i][j] << " ";
-                }
+                cout << matrix[i][j] << " ";
             }
             cout << "\n";
         }
     }
-}
+    return 0;
+} // } Driver Code Ends
