@@ -1,56 +1,67 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#define ll long int
-#define fast                      \
-    ios_base::sync_with_stdio(0); \
-    cin.tie(0);                   \
-    cout.tie(0)
-
+// { Driver Code Starts
+#include <bits/stdc++.h>
 using namespace std;
 
-int msis(vector<ll> &v, int n)
+// } Driver Code Ends
+class Solution
 {
-    if (n == 1)
-        return v[0];
-    vector<ll> t(n, 0);
-    for (int i = 0; i < n; i++)
+
+    int msis(int arr[], vector<int> &dp, int n)
     {
-        t[i] = v[i];
-    }
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < i; j++)
+        for (int i = 1; i < n; i++)
         {
-            if (v[i] > v[j])
+            for (int j = 0; j < i; j++)
             {
-                t[i] = max(t[i], v[i] + t[j]);
+
+                if (arr[i] > arr[j] && (dp[j] + arr[i] > dp[i]))
+                {
+                    dp[i] = dp[j] + arr[i];
+                }
             }
         }
+        int mx = INT_MIN;
+        for (auto it : dp)
+        {
+            mx = max(it, mx);
+        }
+        return mx;
     }
-    ll ans = 0;
-    for (int i = 0; i < n; i++)
-    {
-        ans = max(ans, t[i]);
-    }
-    return ans;
-}
 
+public:
+    int maxSumIS(int arr[], int n)
+    {
+        // Your code goes here
+        if (n == 1)
+            return arr[0];
+        vector<int> dp(n);
+        for (int i = 0; i < n; i++)
+        {
+            dp[i] = arr[i];
+        }
+        return msis(arr, dp, n);
+    }
+};
+
+// { Driver Code Starts.
 int main()
 {
-    int tc;
-    cin >> tc;
-    while (tc--)
+
+    int t;
+    cin >> t;
+    while (t--)
     {
-        ll n;
+        int n;
         cin >> n;
-        vector<ll> v;
-        for (ll i = 0; i < n; i++)
-        {
-            ll x;
-            cin >> x;
-            v.push_back(x);
-        }
-        cout << msis(v, n) << "\n";
+
+        int a[n];
+
+        for (int i = 0; i < n; i++)
+            cin >> a[i];
+
+        Solution ob;
+        cout << ob.maxSumIS(a, n) << "\n";
     }
+    return 0;
 }
+
+// } Driver Code Ends
