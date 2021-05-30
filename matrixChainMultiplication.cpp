@@ -1,38 +1,60 @@
+// { Driver Code Starts
+// Initial Template for C++
+
 #include <bits/stdc++.h>
 using namespace std;
-int t[105][105];
 
-int solve(int a[], int i, int j)
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution
 {
-    if (i >= j)
-        return 0;
-    if (t[i][j] != -1)
-        return t[i][j];
-    int mn = INT_MAX;
-    for (int k = i; k <= j - 1; k++)
+
+    int solve(int i, int j, int a[], vector<vector<int>> &dp)
     {
-        int temp = solve(a, i, k) + solve(a, k + 1, j) + (a[i - 1] * a[k] * a[j]);
-        if (mn > temp)
-            mn = temp;
+        if (i >= j)
+            return 0;
+        if (dp[i][j] != -1)
+        {
+            return dp[i][j];
+        }
+        int mn = INT_MAX;
+        for (int k = i; k <= j - 1; k++)
+        {
+            int temp = solve(i, k, a, dp) + solve(k + 1, j, a, dp) + (a[i - 1] * a[k] * a[j]);
+            if (temp < mn)
+            {
+                mn = temp;
+            }
+        }
+        return dp[i][j] = mn;
     }
 
-    return t[i][j] = mn;
-}
+public:
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        vector<vector<int>> dp(N + 1, vector<int>(N + 1, -1));
+        return solve(1, N - 1, arr, dp);
+    }
+};
+
+// { Driver Code Starts.
 
 int main()
 {
-    int tc;
-    cin >> tc;
-    while (tc--)
+    int t;
+    cin >> t;
+    while (t--)
     {
-        memset(t, -1, sizeof t);
-        int n;
-        cin >> n;
-        int a[n + 5];
-        for (int i = 0; i < n; i++)
-        {
-            cin >> a[i];
-        }
-        cout << solve(a, 1, n - 1) << "\n";
+        int N;
+        cin >> N;
+        int arr[N];
+        for (int i = 0; i < N; i++)
+            cin >> arr[i];
+
+        Solution ob;
+        cout << ob.matrixMultiplication(N, arr) << endl;
     }
-}
+    return 0;
+} // } Driver Code Ends
